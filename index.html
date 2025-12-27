@@ -1,8 +1,306 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=login.html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 Love 💖</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+  min-height:100vh;
+  overflow:hidden;
+  background:linear-gradient(270deg,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1);
+  background-size:800% 800%;
+  animation:bgMove 15s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+.container{
+  text-align:center;
+  width:100%;
+  max-width:520px;
+  padding:20px;
+}
+
+h1{font-size:clamp(2em,5vw,3em);}
+p{margin-top:10px;}
+
+.scene{perspective:1000px;}
+
+/* ===== VÒNG XOAY ===== */
+.circle{
+  position:relative;
+  width:300px;
+  height:300px;
+  margin:40px auto;
+  transform-style:preserve-3d;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  animation:spin 14s linear infinite;
+}
+
+/* XOAY TRÒN CHUẨN */
+@keyframes spin{
+  from{transform:rotateY(0deg)}
+  to{transform:rotateY(360deg)}
+}
+
+/* ===== CARD ===== */
+.card{
+  position:absolute;
+  width:120px;
+  height:160px;
+  top:50%;
+  left:50%;
+  transform-style:preserve-3d;
+  cursor:pointer;
+}
+
+.card-inner{
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  transition:transform .8s;
+}
+
+.card.flipped .card-inner{
+  transform:rotateY(180deg);
+}
+
+.card-front,.card-back{
+  position:absolute;
+  inset:0;
+  border-radius:15px;
+  backface-visibility:hidden;
+  box-shadow:0 10px 20px rgba(0,0,0,.4);
+}
+
+.card-front img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:15px;
+}
+
+/* chữ mặt sau */
+.card-back{
+  background:rgba(255,77,109,.95);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  transform:rotateY(180deg);
+  font-size:18px;
+  font-weight:bold;
+  padding:10px;
+  text-align:center;
+}
+
+/* ===== TIM BAY ===== */
+.heart{
+  position:absolute;
+  bottom:-20px;
+  color:#ff4d6d;
+  font-size:18px;
+  animation:fly 6s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes fly{
+  from{transform:translateY(0) scale(1);opacity:1}
+  to{transform:translateY(-800px) scale(1.8);opacity:0}
+}
+
+/* tim click */
+.click-heart{
+  position:absolute;
+  color:#ff4d6d;
+  font-size:14px;
+  pointer-events:none;
+  animation:burst 1s ease-out forwards;
+}
+
+@keyframes burst{
+  from{transform:translate(0,0) scale(1);opacity:1}
+  to{transform:translate(var(--x),var(--y)) scale(1.8);opacity:0}
+}
+
+/* ===== NÚT ===== */
+.music-controls{
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.music-controls button{
+  padding:10px 22px;
+  border:none;
+  border-radius:999px;
+  background:#ff4d6d;
+  color:white;
+  font-size:14px;
+  cursor:pointer;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:600px){
+  .circle{width:240px;height:240px;}
+  .card{width:100px;height:140px;}
+}
+</style>
 </head>
-<body></body>
+
+<body>
+
+<div class="container">
+  <h1>💖 Anh Yêu Em 💖</h1>
+  <p>Mỗi khoảnh khắc bên em đều là phép màu ✨</p>
+
+  <div class="scene">
+    <div class="circle">
+
+      <div class="card"><div class="card-inner">
+        <div class="card-front"><img src="7686914d-213b-45b7-8184-489c28352f4c.jpg"></div>
+        <div class="card-back">💖 Anh yêu em 💖</div>
+      </div></div>
+
+      <div class="card"><div class="card-inner">
+        <div class="card-front"><img src="hi.jpg"></div>
+        <div class="card-back">💖 Yêu em rất nhiều 💖</div>
+      </div></div>
+
+      <div class="card"><div class="card-inner">
+        <div class="card-front"><img src="z7310320002736_7280947394653cd43b8a0a3cc6e92b60.jpg"></div>
+        <div class="card-back">💖 Nghàn lần yêu em 💖</div>
+      </div></div>
+
+    </div>
+  </div>
+
+  <div class="music-controls">
+    <button id="musicBtn" onclick="toggleMusic()">🎵 Nhạc</button>
+    <button id="spinBtn" onclick="toggleSpin()">⏸️ Dừng quay</button>
+  </div>
+</div>
+
+<audio id="music" loop src="Yêu là Cưới Remix.mp3"></audio>
+
+<script>
+/* ===== NHẠC ===== */
+const music=document.getElementById("music");
+let playing=false;
+function toggleMusic(){
+  playing=!playing;
+  playing?music.play():music.pause();
+  musicBtn.innerText=playing?"⏸️ Dừng Nhạc":"🎵 Nhạc";
+}
+
+/* ===== XẾP ẢNH ===== */
+const cards=document.querySelectorAll(".card");
+const total=cards.length;
+const radius=200;
+
+cards.forEach((card,i)=>{
+  const angle=360/total*i;
+  card.style.transform=
+    `translate(-50%,-50%) rotateY(${angle}deg) translateZ(${radius}px)`;
+
+  card.addEventListener("click",e=>{
+    e.stopPropagation();
+    card.classList.toggle("flipped");
+  });
+});
+
+/* ===== TIM BAY ===== */
+function createHeart(){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=12+Math.random()*20+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+}
+setInterval(createHeart,300);
+
+/* ===== CLICK BUNG TIM ===== */
+document.addEventListener("click",e=>{
+  for(let i=0;i<8;i++){
+    const h=document.createElement("div");
+    h.className="click-heart";
+    h.innerHTML="❤";
+    h.style.left=e.clientX+"px";
+    h.style.top=e.clientY+"px";
+    h.style.setProperty("--x",(Math.random()*100-50)+"px");
+    h.style.setProperty("--y",(Math.random()*100-50)+"px");
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1000);
+  }
+});
+
+/* ===== VUỐT XOAY ===== */
+const circle=document.querySelector(".circle");
+let startX=0;
+let dragging=false;
+
+circle.addEventListener("mousedown",e=>{
+  startX=e.clientX;
+  dragging=true;
+  circle.style.animationPlayState="paused";
+});
+
+document.addEventListener("mousemove",e=>{
+  if(!dragging) return;
+  circle.style.transform=`rotateY(${e.clientX-startX}deg)`;
+});
+
+document.addEventListener("mouseup",()=>{
+  dragging=false;
+  circle.style.transform="";
+  circle.style.animationPlayState="running";
+});
+
+circle.addEventListener("touchstart",e=>{
+  startX=e.touches[0].clientX;
+  dragging=true;
+  circle.style.animationPlayState="paused";
+});
+
+circle.addEventListener("touchmove",e=>{
+  if(!dragging) return;
+  circle.style.transform=`rotateY(${e.touches[0].clientX-startX}deg)`;
+});
+
+circle.addEventListener("touchend",()=>{
+  dragging=false;
+  circle.style.transform="";
+  circle.style.animationPlayState="running";
+});
+
+/* ===== DỪNG / TIẾP TỤC XOAY ===== */
+let spinning=true;
+const spinBtn=document.getElementById("spinBtn");
+
+function toggleSpin(){
+  spinning=!spinning;
+  circle.style.animationPlayState=spinning?"running":"paused";
+  spinBtn.innerText=spinning?"⏸️ Dừng quay":"▶️ Quay ảnh";
+}
+</script>
+
+</body>
 </html>
